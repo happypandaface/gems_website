@@ -50,4 +50,50 @@ Unity Workshop: Saturday 2/16/19: "Workshop led by Dylan Bennet, PIGsquad board 
 <br/>
 <a href=code_of_conduct.html>GEMS Code of Conduct</a>
 </div>
+<img id=spaceship style="width:40px;height:40px;position:fixed" src=spaceship-26556_960_720.png />
+<script>
+ship={}
+ship.x = 10
+ship.y = 10
+ship.rotation = 10
+ship.mouseX = 50
+ship.mouseY = 50
+ship.lastFrameTime = parseFloat(Date.now()/1000)
+function loop(){
+  var shipElem = document.getElementById("spaceship");
+  var thisFrameTime = parseFloat(Date.now()/1000)
+  var frameDelta = thisFrameTime - ship.lastFrameTime
+  ship.lastFrameTime = thisFrameTime
+  var mouseDiffX = (ship.mouseX - ship.x);
+  var mouseDiffY = (ship.mouseY - ship.y);
+  shipElem.style.left = ship.x + "px";
+  shipElem.style.top = ship.y + "px";
+  var angToMouse = Math.atan2(mouseDiffY, mouseDiffX)/Math.PI*180;
+  var angOffset = -90-45
+  var angDiff = angToMouse-(ship.rotation+angOffset)
+  while (angDiff>180)
+    angDiff -= 360
+  while (angDiff<-180)
+    angDiff += 360
+  var rotateSpeed = 90
+  if (angDiff>0)
+    ship.rotation += frameDelta*rotateSpeed
+  else
+    ship.rotation -= frameDelta*rotateSpeed
+  var moveSpeed = 100
+  //ship.x += mouseDiffX/10 * frameDelta;
+  ship.x += Math.cos((ship.rotation+angOffset)/180*Math.PI)*moveSpeed*frameDelta;
+  ship.y += Math.sin((ship.rotation+angOffset)/180*Math.PI)*moveSpeed*frameDelta;
+  //ship.y += mouseDiffY/10 * frameDelta;
+  ship.y += mouseDiffY/10 * frameDelta;
+  shipElem.style.transform = "rotate("+ship.rotation+"deg)";
+  requestAnimationFrame(loop)
+}
+document.onmousemove = function(event){
+  ship.mouseX = event.clientX
+  ship.mouseY = event.clientY
+}
+requestAnimationFrame(loop)
+</script>
+
 </body></html>
